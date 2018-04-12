@@ -39,9 +39,17 @@ CCSRCS =	$(TARGET).cc \
 CSRCS =		$(SRCHOME)/cc/ply/ply_gatech.c
 
 OPENGL =	1
-WIN_SYSTEM =	1
+WIN_SYSTEM =	0
+OS = LINUX
+CXX =		g++
+CC =		g++
+MAKE =		gmake
+OUTPUT =	-o $(TARGET)
+OBJECTS =	$(CCSRCS:.cc=.o) $(CSRCS:.c=.o)
+OBJECTS :=	$(OBJECTS:.C=.o)
+OBJECTS :=	$(OBJECTS:.cpp=.o)
 
-USER_FLAGS =	-Wno-write-strings
+USER_FLAGS = -Wno-write-strings
 
 include $(SRCHOME)/cc/makefile.std
 
@@ -51,8 +59,12 @@ include $(SRCHOME)/cc/makefile.std
 # main target
 #
 
+# $(TARGET):	version.h $(OBJECTS)
+# 	$(CXX) $(OUTPUT) $(CXXFLAGS) $(OBJECTS) $(LDFLAGS) $(LIBS)
+
 $(TARGET):	version.h $(OBJECTS)
-	$(CXX) $(OUTPUT) $(CXXFLAGS) $(OBJECTS) $(LDFLAGS) $(LIBS)
+	$(CXX) $(OUTPUT) $(CXXFLAGS) $(OBJECTS) -L /usr/lib/x86_64-linux-gnu/  -lglut -lGLU -lGL -L /usr/X11R6/lib -lm
+
 
 ifeq ($(OS), WINDOWS)
 clean:
